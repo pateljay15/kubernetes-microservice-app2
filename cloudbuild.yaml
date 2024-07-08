@@ -9,6 +9,18 @@ steps:
     args: ['build', '-t', 'us-central1-docker.pkg.dev/kubernetes-cicd-pipeline/kubernetes-container-images/micro-service-app2', '.']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/kubernetes-cicd-pipeline/kubernetes-container-images/micro-service-app2']
-    
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+    - run
+    - --filename=./kubernetes
+    - --image=${_IMAGE_NAME}
+    - --location=${_CLUSTER_LOCATION}
+    - --cluster=${_CLUSTER_NAME}
+
 options:
   logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _IMAGE_NAME: 'us-central1-docker.pkg.dev/kubernetes-cicd-pipeline/kubernetes-container-images/micro-service-app2:latest'
+  _CLUSTER_LOCATION: 'us-central1-c'
+  _CLUSTER_NAME: 'my-gke-cluster'
