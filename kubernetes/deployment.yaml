@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservices-deployment-app2
+  labels:
+    app: microservice-app2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice-app2
+      tier: web
+  template:
+    metadata:
+      labels:
+        app: microservice-app2
+        tier: web
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: microservice-app2
+        image: us-central1-docker.pkg.dev/kubernetes-cicd-pipeline/kubernetes-container-images/micro-service-app2:latest
+        securityContext:
+          runAsUser: 1000  # Run as non-root user
+        ports:
+        - containerPort: 6060
+        volumeMounts:
+        - mountPath: /Jay_PV_dir
+          name: storage-disk-volume
+      volumes:
+      - name: storage-disk-volume
+        persistentVolumeClaim:
+          claimName: app-volume-pvc

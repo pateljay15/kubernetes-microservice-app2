@@ -24,7 +24,7 @@ app.post("/calculate", (req, res) => {
         })
     }
 
-    if (fs.existsSync('../jay_PV_dir/'+req.body.file)) {
+    if (fs.existsSync('/Jay_PV_dir/'+req.body.file)) {
         // console.log("file exists")
     } else {
         return res.status(400).json({
@@ -35,7 +35,7 @@ app.post("/calculate", (req, res) => {
 
     try {
 
-        fs.createReadStream('../jay_PV_dir/'+ req.body.file)
+        fs.createReadStream('/Jay_PV_dir/'+ req.body.file)
         .pipe(csv({ separator: ',',  strict: true}))
         .on('data', (data) => products.push(data))
         .on('end', () => {
